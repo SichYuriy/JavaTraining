@@ -17,15 +17,15 @@ public class GcdCalculator {
         if (y == 0)
             return x;
 
-        if ((~x & 1) != 0) {
-            if ((y & 1) != 0) {
+        if ((~x & 1) != 0) { // x is even
+            if ((y & 1) != 0) { // y is odd
                 return calculateGcd(x >> 1, y);
             } else {
                 return calculateGcd(x >> 1, y >> 1) << 1;
             }
         }
 
-        if ((~y & 1) != 0) {
+        if ((~y & 1) != 0) { // y is even
             return calculateGcd(x, y >> 1);
         }
 

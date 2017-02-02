@@ -8,6 +8,10 @@ import java.math.BigInteger;
 public class KaratsubaMultiplier {
 
     public BigInteger karaMultiply(BigInteger x, BigInteger y) {
+        int signum = x.signum() * y.signum();
+        x = x.abs();
+        y = y.abs();
+
         if (x.equals(BigInteger.ZERO)
                 || y.equals(BigInteger.ZERO)) {
             return BigInteger.ZERO;
@@ -20,9 +24,9 @@ public class KaratsubaMultiplier {
         }
 
         BigInteger a = x.shiftRight(shiftLength);
-        BigInteger b = x.subtract(a.shiftRight(shiftLength));
+        BigInteger b = x.andNot(a.shiftLeft(shiftLength));
         BigInteger c = y.shiftRight(shiftLength);
-        BigInteger d = y.subtract(c.shiftLeft(shiftLength));
+        BigInteger d = y.andNot(c.shiftLeft(shiftLength));
 
         BigInteger productAC = karaMultiply(a, c);
         BigInteger productBD = karaMultiply(b, d);
@@ -31,14 +35,14 @@ public class KaratsubaMultiplier {
         return productAC.shiftLeft(shiftLength << 1)
                 .add(productBD)
                 .add(productABCD.subtract(productAC.add(productBD))
-                        .shiftLeft(shiftLength));
+                        .shiftLeft(shiftLength))
+                .multiply(BigInteger.valueOf(signum));
     }
 
     public long karaMultiply(long x, long y) {
         if (x == 0 || y == 0) {
             return 0;
         }
-
         boolean negative = false;
         if ((x > 0 && y < 0)
                 || (x < 0 && y > 0)) {

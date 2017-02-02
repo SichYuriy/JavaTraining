@@ -5,6 +5,9 @@ package com.gmail.at.sichyuriyy.javatraining.homework1;
  */
 public class BitwiseUtils {
 
+    private BitwiseUtils() {
+    }
+
     public static int countBitLengthOfByte() {
         byte byteNumber = 1;
         int length = 0;

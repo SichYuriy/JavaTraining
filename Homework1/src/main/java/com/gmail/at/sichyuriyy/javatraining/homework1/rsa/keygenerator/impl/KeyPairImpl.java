@@ -4,8 +4,6 @@ import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.cipher.RsaPrivateKey;
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.cipher.RsaPublicKey;
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.keygenerator.KeyPair;
 
-import java.security.PublicKey;
-
 /**
  * Created by Yuriy on 02.02.2017.
  */
@@ -13,10 +11,6 @@ public class KeyPairImpl implements KeyPair {
 
     private RsaPublicKey publicKey;
     private RsaPrivateKey privateKey;
-
-    public KeyPairImpl() {
-
-    }
 
     public KeyPairImpl(RsaPublicKey publicKey, RsaPrivateKey privateKey) {
         this.publicKey = publicKey;

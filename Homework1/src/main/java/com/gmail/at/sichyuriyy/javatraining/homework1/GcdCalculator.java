@@ -14,9 +14,9 @@ public class GcdCalculator {
         } else if (y == Long.MIN_VALUE) {
             calculateGcdOfLongMinValue(y, x);
         }
-        x = abs(x);
-        y = abs(y);
-        return calculateGcdRecursively(x, y);
+        long positiveX = abs(x);
+        long positiveY = abs(y);
+        return calculateGcdRecursively(positiveX, positiveY);
 
     }
 

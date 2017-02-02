@@ -8,25 +8,25 @@ import java.math.BigInteger;
 public class KaratsubaMultiplier {
 
     public BigInteger karaMultiply(BigInteger x, BigInteger y) {
-        int signum = x.signum() * y.signum();
-        x = x.abs();
-        y = y.abs();
-
         if (x.equals(BigInteger.ZERO)
                 || y.equals(BigInteger.ZERO)) {
             return BigInteger.ZERO;
         }
+        
+        int negative = x.signum() * y.signum();
+        BigInteger absX = x.abs();
+        BigInteger absY = y.abs();
 
-        int shiftLength = Math.max(x.bitLength(), y.bitLength()) / 2;
+        int shiftLength = Math.max(absX.bitLength(), absY.bitLength()) / 2;
 
         if (shiftLength == 0) {
-            return x.multiply(y);
+            return absX.multiply(y);
         }
 
-        BigInteger a = x.shiftRight(shiftLength);
-        BigInteger b = x.andNot(a.shiftLeft(shiftLength));
-        BigInteger c = y.shiftRight(shiftLength);
-        BigInteger d = y.andNot(c.shiftLeft(shiftLength));
+        BigInteger a = absX.shiftRight(shiftLength);
+        BigInteger b = absX.andNot(a.shiftLeft(shiftLength));
+        BigInteger c = absY.shiftRight(shiftLength);
+        BigInteger d = absY.andNot(c.shiftLeft(shiftLength));
 
         BigInteger productAC = karaMultiply(a, c);
         BigInteger productBD = karaMultiply(b, d);
@@ -36,7 +36,7 @@ public class KaratsubaMultiplier {
                 .add(productBD)
                 .add(productABCD.subtract(productAC.add(productBD))
                         .shiftLeft(shiftLength))
-                .multiply(BigInteger.valueOf(signum));
+                .multiply(BigInteger.valueOf(negative));
     }
 
     public long karaMultiply(long x, long y) {
@@ -48,22 +48,22 @@ public class KaratsubaMultiplier {
                 || (x < 0 && y > 0)) {
             negative = true;
         }
-        x = Math.abs(x);
-        y = Math.abs(y);
+        long absX = BitwiseUtils.abs(x);
+        long absY = BitwiseUtils.abs(y);
 
-        int lengthX = getBitLength(x);
-        int lengthY = getBitLength(y);
+        int lengthX = getBitLength(absX);
+        int lengthY = getBitLength(absY);
 
         int shiftLength = Math.max(lengthX, lengthY) / 2;
 
         if (shiftLength == 0) {
-            return x & y;
+            return absX & absY;
         }
 
-        long a = x >> shiftLength;
-        long b = x & (~(a << shiftLength));
-        long c = y >> shiftLength;
-        long d = y & (~(c << shiftLength));
+        long a = absX >> shiftLength;
+        long b = absX & (~(a << shiftLength));
+        long c = absY >> shiftLength;
+        long d = absY & (~(c << shiftLength));
 
         long productAC = karaMultiply(a, c);
         long productBD = karaMultiply(b, d);
@@ -82,7 +82,7 @@ public class KaratsubaMultiplier {
     private int getBitLength(long number) {
         int length = 0;
         while (number != 0) {
-            number = number >> 1;
+            number >>= 1;
             length++;
         }
         return length;

@@ -12,10 +12,6 @@ public class RsaPrivateKeyImpl implements RsaPrivateKey {
     private BigInteger modulus;
     private BigInteger privateExponent;
 
-    public RsaPrivateKeyImpl() {
-
-    }
-
     public RsaPrivateKeyImpl(BigInteger modulus, BigInteger privateExponent) {
         this.modulus = modulus;
         this.privateExponent = privateExponent;

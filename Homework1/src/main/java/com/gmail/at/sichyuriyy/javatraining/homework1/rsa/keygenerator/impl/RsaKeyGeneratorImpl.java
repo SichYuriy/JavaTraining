@@ -6,8 +6,6 @@ import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.cipher.impl.RsaPrivate
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.cipher.impl.RsaPublicKeyImpl;
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.keygenerator.KeyPair;
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.keygenerator.RsaKeyGenerator;
-import javafx.util.Pair;
-
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
@@ -17,17 +15,17 @@ import java.security.SecureRandom;
 public class RsaKeyGeneratorImpl implements RsaKeyGenerator {
 
     private static final BigInteger publicExponent = new BigInteger("65537");
-    private static final BigInteger one = BigInteger.ONE;
-    private static final int modulesLength = 1024;
+    private static final BigInteger ONE = BigInteger.ONE;
+    private static final int MODULUS_LENGTH = 1024;
 
     private SecureRandom random = new SecureRandom();
 
     @Override
     public KeyPair generateKeys() {
-        BigInteger p = BigInteger.probablePrime(modulesLength / 2, random);
-        BigInteger q = BigInteger.probablePrime(modulesLength / 2, random);
+        BigInteger p = BigInteger.probablePrime(MODULUS_LENGTH / 2, random);
+        BigInteger q = BigInteger.probablePrime(MODULUS_LENGTH / 2, random);
 
-        BigInteger phi = (p.subtract(one)).multiply(q.subtract(one));
+        BigInteger phi = (p.subtract(ONE)).multiply(q.subtract(ONE));
 
         BigInteger modulus = p.multiply(q);
         BigInteger privateExponent = publicExponent.modInverse(phi);

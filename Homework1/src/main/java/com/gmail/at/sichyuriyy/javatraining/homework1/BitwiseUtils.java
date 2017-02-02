@@ -59,6 +59,13 @@ public class BitwiseUtils {
         return number | (1 << (pos - 1));
     }
 
+    public static long abs(long value) {
+        if (value < 0) {
+            return ~value + 1;
+        }
+        return value;
+    }
+
 
 
 

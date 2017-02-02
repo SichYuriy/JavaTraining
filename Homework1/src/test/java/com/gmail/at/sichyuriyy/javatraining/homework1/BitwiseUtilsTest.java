@@ -83,4 +83,44 @@ public class BitwiseUtilsTest {
         int actual = BitwiseUtils.setBitOne(number, badPos);
     }
 
+    @Test
+    public void abs_positive() {
+        long val = 123;
+        long actual = BitwiseUtils.abs(val);
+        long expected = 123;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void abs_negative() {
+        long val = -123;
+        long actual = BitwiseUtils.abs(val);
+        long expected = 123;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void abs_zero() {
+        long val = 0;
+        long actual = BitwiseUtils.abs(val);
+        long expected = 0;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void abs_maxValue() {
+        long val = Long.MAX_VALUE;
+        long actual = BitwiseUtils.abs(val);
+        long expected = Long.MAX_VALUE;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void abs_minValue() {
+        long val = Long.MIN_VALUE;
+        long actual = BitwiseUtils.abs(val);
+        long expected = Long.MIN_VALUE;
+        assertEquals(expected, actual);
+    }
+
 }

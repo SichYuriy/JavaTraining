@@ -57,11 +57,29 @@ public class GcdCalculatorTest {
     }
 
     @Test
-    public void calculateGcd_oneMinValue() {
+    public void calculateGcd_oneMinValueXOtherEven() {
         long x = Long.MIN_VALUE;
         long y = 5660;
         long actual = calculator.calculateGcd(x, y);
         long expected = 4;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void calculateGcd_oneMinValueYOtherEven() {
+        long y = Long.MIN_VALUE;
+        long x = 5660;
+        long actual = calculator.calculateGcd(x, y);
+        long expected = 4;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void calculateGcd_oneMinValueOtherOdd() {
+        long x = Long.MIN_VALUE;
+        long y = 5661;
+        long actual = calculator.calculateGcd(x, y);
+        long expected = 1;
         assertEquals(expected, actual);
     }
 
@@ -73,6 +91,26 @@ public class GcdCalculatorTest {
         long expected = Long.MIN_VALUE;
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void calculateGcd_zero() {
+        long x = 1234;
+        long y = 0;
+        long actual = calculator.calculateGcd(x, y);
+        long expected = 1234;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void calculateGcd_zeroZero() {
+        long x = 0;
+        long y = 0;
+        long actual = calculator.calculateGcd(x, y);
+        long expected = 0;
+        assertEquals(expected, actual);
+    }
+
+
 
 
 }

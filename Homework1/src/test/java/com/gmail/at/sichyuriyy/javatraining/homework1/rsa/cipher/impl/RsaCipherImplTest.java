@@ -3,12 +3,11 @@ package com.gmail.at.sichyuriyy.javatraining.homework1.rsa.cipher.impl;
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.cipher.RsaCipher;
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.cipher.RsaPrivateKey;
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.cipher.RsaPublicKey;
+import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.exception.GreaterThenModulusException;
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.keygenerator.KeyPair;
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.keygenerator.RsaKeyGenerator;
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.keygenerator.impl.RsaKeyGeneratorImpl;
 import org.junit.Test;
-
-import java.security.PublicKey;
 
 import static org.junit.Assert.*;
 
@@ -33,21 +32,46 @@ public class RsaCipherImplTest {
         assertArrayEquals(expected, actualDecryptedData);
     }
 
-    @Test
-    public void encryptDecrypt_wrongKey() {
-        String message = "Hello world!";
+    @Test(expected = GreaterThenModulusException.class)
+    public void encrypt_greaterThenModulusException() {
+        byte[] message = new byte[10000000];
+        message[0] = 1;
+        message[9999999] = 1;
         KeyPair keyPair = keyGenerator.generateKeys();
-        KeyPair wrongKeyPair = keyGenerator.generateKeys();
+        cipher.encrypt(message, keyPair.getPublicKey());
 
-        RsaPublicKey publicKey = keyPair.getPublicKey();
-        RsaPrivateKey wrongPrivateKey = wrongKeyPair.getPrivateKey();
+    }
 
-        byte[] encryptedData = cipher.encrypt(message.getBytes(), publicKey);
-        byte[] actualDecryptedData = cipher.decrypt(encryptedData, wrongPrivateKey);
-        byte[] unexpected = message.getBytes();
+    @Test(expected = GreaterThenModulusException.class)
+    public void decrypt_greaterThenModulusException() {
+        byte[] message = new byte[10000000];
+        message[0] = 1;
+        message[9999999] = 1;
+        KeyPair keyPair = keyGenerator.generateKeys();
+        cipher.decrypt(message, keyPair.getPrivateKey());
 
-        assertNotSame(unexpected, actualDecryptedData);
+    }
 
+    @Test(expected = NullPointerException.class)
+    public void encrypt_dataNull() {
+        KeyPair keyPair = keyGenerator.generateKeys();
+        cipher.encrypt(null, keyPair.getPublicKey());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void encrypt_keyNull() {
+        cipher.encrypt("message".getBytes(), null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void decrypt_dataNull() {
+        KeyPair keyPair = keyGenerator.generateKeys();
+        cipher.decrypt(null, keyPair.getPrivateKey());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void decrypt_keyNull() {
+        cipher.decrypt("message".getBytes(), null);
     }
 
 }

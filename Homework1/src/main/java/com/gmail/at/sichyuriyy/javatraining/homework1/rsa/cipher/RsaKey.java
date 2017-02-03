@@ -7,5 +7,10 @@ import java.math.BigInteger;
  */
 public interface RsaKey {
 
+
+    /**
+     * @return common part of public and private keys
+     *      during rsa encrypting/decrypting
+     */
     BigInteger getModulus();
 }

@@ -6,6 +6,12 @@ import static com.gmail.at.sichyuriyy.javatraining.homework1.BitwiseUtils.abs;
  */
 public class GcdCalculator {
 
+    /**
+     * @param x first param
+     * @param y second param
+     * @return <p><b>gcd</b> of params</p>
+     *      <p><b>Long.MIN_VALUE</b> if both of params is equal Long.MIN_VALUE</p>
+     */
     long calculateGcd(long x, long y) {
         if (x == Long.MIN_VALUE && y == Long.MIN_VALUE) {
             return Long.MIN_VALUE;
@@ -20,13 +26,24 @@ public class GcdCalculator {
 
     }
 
+    /**
+     * <p>algorithm notes:</p>
+     * <ol>
+     *     <li>if one of params is zero: gcd(0, b) = b</li>
+     *     <li>if both params even numbers: gcd(a, b) = gcd(a / 2, b / 2) * 2</li>
+     *     <li>if only one param(a) is even: gcd(a, b) = gcd(a / 2, b)</li>
+     *     <li>if both params odd and a is bigger: gcd(a, b) = ((a - b) / 2, b)</li>
+     * </ol>
+     *
+     * @param x first number
+     * @param y second number
+     * @return gcd of parameters
+     */
     private long calculateGcdRecursively(long x, long y) {
         if (x == y)
             return x;
-        if (x == 0)
-            return y;
-        if (y == 0)
-            return x;
+        if (x == 0 || y == 0)
+            return Math.max(x, y);
 
         if ((~x & 1) != 0) { // x is even
             if ((y & 1) != 0) { // y is odd
@@ -47,9 +64,7 @@ public class GcdCalculator {
 
     private long calculateGcdOfLongMinValue(long minValue, long otherValue) {
         if ((otherValue & 1) != 0) { // is odd
-            long x = abs(minValue >> 1);
-            long y = abs(otherValue);
-            return calculateGcdRecursively(x, y);
+            return 1;
         } else {
             long x = abs(minValue >> 1);
             long y = abs(otherValue >> 1);

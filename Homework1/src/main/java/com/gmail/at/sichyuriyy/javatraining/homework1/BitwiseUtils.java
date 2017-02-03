@@ -48,6 +48,11 @@ public class BitwiseUtils {
         return length;
     }
 
+    /**
+     * @param number
+     * @param pos - index of bit to set zero, starting from 1
+     * @return
+     */
     public static int setBitZero(int number, int pos) {
         if (pos <= 0 || pos > 32) {
             throw new IndexOutOfBoundsException();
@@ -55,6 +60,11 @@ public class BitwiseUtils {
         return number & (~(1 << (pos - 1)));
     }
 
+    /**
+     * @param number
+     * @param pos - index of bit to set zero, starting from 1
+     * @return
+     */
     public static int setBitOne(int number, int pos) {
         if (pos <= 0 || pos > 32) {
             throw new IndexOutOfBoundsException();

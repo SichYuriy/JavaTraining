@@ -7,6 +7,17 @@ import java.math.BigInteger;
  */
 public class KaratsubaMultiplier {
 
+    /**
+     * <p>algorithm notes:</p>
+     * <ul>
+     *     <li>x = (a << T) + b</li>
+     *     <li>y = (c << T) + d</li>
+     *     <li>x * y == (a * c) << 2T + b * d + ((a + b)*(c + d) - (a*c + b*d)) << T</li>
+     * </ul>
+     * @param x x
+     * @param y y
+     * @return x * y
+     */
     public BigInteger karaMultiply(BigInteger x, BigInteger y) {
         if (x.equals(BigInteger.ZERO)
                 || y.equals(BigInteger.ZERO)) {
@@ -39,6 +50,17 @@ public class KaratsubaMultiplier {
                 .multiply(BigInteger.valueOf(negative));
     }
 
+    /**
+     * <p>algorithm notes:</p>
+     * <ul>
+     *     <li>x = (a << T) + b</li>
+     *     <li>y = (c << T) + d</li>
+     *     <li>x * y == (a * c) << 2T + b * d + ((a + b)*(c + d) - (a*c + b*d)) << T</li>
+     * </ul>
+     * @param x x
+     * @param y y
+     * @return x * y
+     */
     public long karaMultiply(long x, long y) {
         if (x == 0 || y == 0) {
             return 0;
@@ -81,8 +103,9 @@ public class KaratsubaMultiplier {
 
     private int getBitLength(long number) {
         int length = 0;
-        while (number != 0) {
-            number >>= 1;
+        long temp = number;
+        while (temp != 0) {
+            temp >>= 1;
             length++;
         }
         return length;

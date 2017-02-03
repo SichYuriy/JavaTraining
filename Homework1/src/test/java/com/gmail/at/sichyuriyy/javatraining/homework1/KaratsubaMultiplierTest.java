@@ -54,6 +54,16 @@ public class KaratsubaMultiplierTest {
     }
 
     @Test
+    public void karaMultiplyLong_zeroZero() {
+        long x = 0;
+        long y = 0;
+        long actual = multiplier.karaMultiply(x, y);
+        long expected = 0;
+        assertEquals(expected, actual);
+
+    }
+
+    @Test
     public void karaMultiplyBigInteger() {
         BigInteger x = new BigInteger("1023", 10);
         BigInteger y = new BigInteger("7829", 10);
@@ -86,6 +96,16 @@ public class KaratsubaMultiplierTest {
     @Test
     public void karaMultiplyBigInteger_zero() {
         BigInteger x = new BigInteger("1023", 10);
+        BigInteger y = BigInteger.ZERO;
+        BigInteger actual = multiplier.karaMultiply(x, y);
+        BigInteger expected = BigInteger.ZERO;
+        assertEquals(expected, actual);
+
+    }
+
+    @Test
+    public void karaMultiplyBigInteger_zeroZero() {
+        BigInteger x = BigInteger.ZERO;
         BigInteger y = BigInteger.ZERO;
         BigInteger actual = multiplier.karaMultiply(x, y);
         BigInteger expected = BigInteger.ZERO;

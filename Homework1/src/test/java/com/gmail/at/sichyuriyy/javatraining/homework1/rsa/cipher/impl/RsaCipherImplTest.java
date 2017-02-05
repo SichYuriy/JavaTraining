@@ -1,13 +1,12 @@
 package com.gmail.at.sichyuriyy.javatraining.homework1.rsa.cipher.impl;
 
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.cipher.RsaCipher;
-import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.cipher.RsaPrivateKey;
-import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.cipher.RsaPublicKey;
-import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.exception.GreaterThenModulusException;
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.keygenerator.KeyPair;
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.keygenerator.RsaKeyGenerator;
 import com.gmail.at.sichyuriyy.javatraining.homework1.rsa.keygenerator.impl.RsaKeyGeneratorImpl;
 import org.junit.Test;
+
+import java.math.BigInteger;
 
 import static org.junit.Assert.*;
 
@@ -16,8 +15,8 @@ import static org.junit.Assert.*;
  */
 public class RsaCipherImplTest {
 
-    RsaCipher cipher = new RsaCipherImpl();
-    RsaKeyGenerator keyGenerator = new RsaKeyGeneratorImpl();
+    private RsaCipher cipher = new RsaCipherImpl();
+    private RsaKeyGenerator keyGenerator = new RsaKeyGeneratorImpl();
 
 
 
@@ -32,46 +31,62 @@ public class RsaCipherImplTest {
         assertArrayEquals(expected, actualDecryptedData);
     }
 
-    @Test(expected = GreaterThenModulusException.class)
-    public void encrypt_greaterThenModulusException() {
+    @Test
+    public void encrypt_largeData() {
         byte[] message = new byte[10000000];
         message[0] = 1;
         message[9999999] = 1;
         KeyPair keyPair = keyGenerator.generateKeys();
-        cipher.encrypt(message, keyPair.getPublicKey());
+        byte[] encryptedData = cipher.encrypt(message, keyPair.getPublicKey());
+        byte[] actualDecryptedData = cipher.decrypt(encryptedData, keyPair.getPrivateKey());
 
+        byte[] expected = message;
+
+        assertArrayEquals(expected, actualDecryptedData);
     }
 
-    @Test(expected = GreaterThenModulusException.class)
-    public void decrypt_greaterThenModulusException() {
-        byte[] message = new byte[10000000];
-        message[0] = 1;
-        message[9999999] = 1;
+    @Test
+    public void encrypt_nullData() {
         KeyPair keyPair = keyGenerator.generateKeys();
-        cipher.decrypt(message, keyPair.getPrivateKey());
-
+        byte[] encryptedData = cipher.encrypt(null, keyPair.getPublicKey());
+        byte[] expected = new byte[0];
+        assertArrayEquals(expected, encryptedData);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void encrypt_dataNull() {
-        KeyPair keyPair = keyGenerator.generateKeys();
-        cipher.encrypt(null, keyPair.getPublicKey());
-    }
-
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void encrypt_keyNull() {
-        cipher.encrypt("message".getBytes(), null);
+        cipher.encrypt("Hello!".getBytes(), null);
     }
 
-    @Test(expected = NullPointerException.class)
-    public void decrypt_dataNull() {
+    @Test(expected = IllegalArgumentException.class)
+    public void encrypt_badKey() {
+        BigInteger publicExponent = BigInteger.valueOf(2);
+        BigInteger modulus = BigInteger.valueOf(6);
+
+        RsaPublicKeyImpl key = new RsaPublicKeyImpl(modulus, publicExponent);
+        cipher.encrypt("message".getBytes(), key);
+    }
+
+    @Test
+    public void decrypt_nullData() {
         KeyPair keyPair = keyGenerator.generateKeys();
-        cipher.decrypt(null, keyPair.getPrivateKey());
+        byte[] decryptedData = cipher.decrypt(null, keyPair.getPrivateKey());
+        byte[] expected = new byte[0];
+        assertArrayEquals(expected, decryptedData);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void decrypt_keyNull() {
-        cipher.decrypt("message".getBytes(), null);
+        cipher.decrypt("Hello!".getBytes(), null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void decrypt_badKey() {
+        BigInteger privateExponent = BigInteger.valueOf(2);
+        BigInteger modulus = BigInteger.valueOf(6);
+
+        RsaPrivateKeyImpl key = new RsaPrivateKeyImpl(modulus, privateExponent);
+        cipher.decrypt("message".getBytes(), key);
     }
 
 }

@@ -1,9 +1,10 @@
 package com.gmail.at.sichyuriyy.javatraining.homework1.rsa.keygenerator;
 
+import java.math.BigInteger;
+
 /**
  * Created by Yuriy on 02.02.2017.
  */
-@FunctionalInterface
 public interface RsaKeyGenerator {
 
    /**
@@ -11,5 +12,11 @@ public interface RsaKeyGenerator {
     *       {@link com.gmail.at.sichyuriyy.javatraining.homework1.rsa.cipher.RsaCipher RsaCipher}
     */
    KeyPair generateKeys();
+
+   KeyPair generateKeys(BigInteger p, BigInteger q);
+
+   KeyPair generateKeys(int modulusBitLength);
+
+   BigInteger generatePrime(int bitLength);
 
 }

@@ -1,6 +1,8 @@
 package com.gmail.at.sichyuriyy.javatraining.homework2.task3;
 
 
+import java.util.*;
+
 /**
  * Created by Yuriy on 14.02.2017.
  */
@@ -9,6 +11,8 @@ public class BidirectionalLinkedList<E> implements MyList<E> {
     private int size;
     private Node<E> head;
     private Node<E> tail;
+
+    int modCount = 0;
 
     @Override
     public int size() {
@@ -35,6 +39,7 @@ public class BidirectionalLinkedList<E> implements MyList<E> {
 
     @Override
     public void add(E val) {
+        modCount++;
         size++;
         if (size - 1 == 0) {
             head = tail = new Node<>(val);
@@ -49,6 +54,7 @@ public class BidirectionalLinkedList<E> implements MyList<E> {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
         }
+        modCount++;
         size++;
         if (size - 1 == 0) {
             head = tail = new Node<>(val);
@@ -76,6 +82,7 @@ public class BidirectionalLinkedList<E> implements MyList<E> {
         if (size == 1 && val.equals(head.getVal())) {
             size = 0;
             head = tail = null;
+            modCount++;
             return;
         }
 
@@ -84,6 +91,7 @@ public class BidirectionalLinkedList<E> implements MyList<E> {
             if (val.equals(temp.getVal())) {
                 deleteNode(temp);
                 size--;
+                modCount++;
                 return;
             }
             temp = temp.getNext();
@@ -100,11 +108,13 @@ public class BidirectionalLinkedList<E> implements MyList<E> {
         if (size == 1) {
             head = tail = null;
             size--;
+            modCount++;
             return;
         }
         Node<E> temp = getNode(index);
         deleteNode(temp);
         size--;
+        modCount++;
     }
 
     @Override
@@ -174,6 +184,57 @@ public class BidirectionalLinkedList<E> implements MyList<E> {
         return temp;
     }
 
+    @Override
+    public Iterator<E> iterator() {
+        return new MyListIterator();
+    }
+
+    private class MyListIterator implements Iterator<E> {
+
+        private int tempModCount;
+        private Node<E> tempNode;
+        private Node<E> lastReturned;
+
+        public MyListIterator() {
+            this.tempModCount = modCount;
+            this.tempNode = head;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return tempNode != null;
+        }
+
+        @Override
+        public E next() {
+            checkForModification();
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            E result = tempNode.getVal();
+            lastReturned = tempNode;
+            tempNode = tempNode.getNext();
+            return result;
+        }
+
+        @Override
+        public void remove() {
+            checkForModification();
+            if (lastReturned == null) {
+                throw new IllegalStateException();
+            }
+            deleteNode(lastReturned);
+            size--;
+            modCount++;
+            tempModCount++;
+        }
+
+        private void checkForModification() {
+            if (modCount != tempModCount) {
+                throw new ConcurrentModificationException();
+            }
+        }
+    }
 
     private static class Node<E> {
         E val;

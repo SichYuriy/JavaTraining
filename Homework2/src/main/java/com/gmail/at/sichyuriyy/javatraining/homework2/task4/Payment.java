@@ -57,6 +57,7 @@ public class Payment {
         void addCount(int count) {
             this.count += count;
             totalPrice += product.getPrice() * count;
+
         }
 
     }

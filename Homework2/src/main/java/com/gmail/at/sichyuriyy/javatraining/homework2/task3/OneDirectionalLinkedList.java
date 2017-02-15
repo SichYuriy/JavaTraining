@@ -1,6 +1,10 @@
 package com.gmail.at.sichyuriyy.javatraining.homework2.task3;
 
 
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 /**
  * Created by Yuriy on 14.02.2017.
  */
@@ -9,6 +13,7 @@ public class OneDirectionalLinkedList<E> implements MyList<E> {
 
     private int size;
     private Node<E> head;
+    private int modCount = 0;
 
     @Override
     public int size() {
@@ -47,6 +52,7 @@ public class OneDirectionalLinkedList<E> implements MyList<E> {
 
     @Override
     public void add(E val) {
+        modCount++;
         size++;
         if (size - 1 == 0) {
             head = new Node<>(val);
@@ -64,14 +70,14 @@ public class OneDirectionalLinkedList<E> implements MyList<E> {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException();
         }
+        modCount++;
         size++;
         if (size - 1 == 0) {
             head = new Node<>(val);
             return;
         }
         if (index == 0) {
-            Node first = new Node<>(val, head);
-            head = first;
+            head = new Node<>(val, head);;
             return;
         }
         Node<E> temp = head.getNext();
@@ -96,6 +102,7 @@ public class OneDirectionalLinkedList<E> implements MyList<E> {
         if (val.equals(head.getVal())) {
             size--;
             head = head.getNext();
+            modCount++;
             return;
         }
         Node<E> temp = head.next;
@@ -104,6 +111,7 @@ public class OneDirectionalLinkedList<E> implements MyList<E> {
             if (val.equals(temp.getVal())) {
                 size--;
                 prev.setNext(temp.getNext());
+                modCount++;
                 return;
             }
             temp = temp.getNext();
@@ -119,6 +127,7 @@ public class OneDirectionalLinkedList<E> implements MyList<E> {
         if (index == 0) {
             size--;
             head = head.getNext();
+            modCount++;
             return;
         }
 
@@ -130,7 +139,8 @@ public class OneDirectionalLinkedList<E> implements MyList<E> {
             prev = prev.getNext();
             tempIndex++;
         }
-        prev.setNext(temp.getNext());;
+        prev.setNext(temp.getNext());
+        modCount++;
     }
 
     @Override
@@ -166,6 +176,58 @@ public class OneDirectionalLinkedList<E> implements MyList<E> {
         }
         result += temp.getVal() + "]";
         return result;
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return new MyListIterator();
+    }
+
+    private class MyListIterator implements Iterator<E> {
+
+        private int tempModCount;
+        private Node<E> tempNode;
+        private Node<E> lastReturned;
+        private int indexLastReturned = -1;
+
+        public MyListIterator() {
+            this.tempModCount = modCount;
+            this.tempNode = head;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return tempNode != null;
+        }
+
+        @Override
+        public E next() {
+            checkForModification();
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            E result = tempNode.getVal();
+            lastReturned = tempNode;
+            tempNode = tempNode.getNext();
+            indexLastReturned++;
+            return result;
+        }
+
+        @Override
+        public void remove() {
+            checkForModification();
+            if (lastReturned == null) {
+                throw new IllegalStateException();
+            }
+            OneDirectionalLinkedList.this.remove(indexLastReturned);
+            tempModCount++;
+        }
+
+        private void checkForModification() {
+            if (modCount != tempModCount) {
+                throw new ConcurrentModificationException();
+            }
+        }
     }
 
     private static class Node<E> {

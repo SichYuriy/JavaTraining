@@ -9,6 +9,6 @@ public class OneDirectionalLinkedListTest extends MyListTest {
 
     @Override
     protected MyList<Integer> getTestedMyList() {
-        return new OneDirectionalLinkedList<Integer>();
+        return new OneDirectionalLinkedList<>();
     }
 }

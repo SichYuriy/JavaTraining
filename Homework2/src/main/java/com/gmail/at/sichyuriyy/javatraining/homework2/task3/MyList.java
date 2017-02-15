@@ -3,7 +3,7 @@ package com.gmail.at.sichyuriyy.javatraining.homework2.task3;
 /**
  * Created by Yuriy on 13.02.2017.
  */
-public interface MyList<E> {
+public interface MyList<E> extends Iterable<E> {
 
     int size();
     E get(int index);

@@ -4,6 +4,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import static org.junit.Assert.*;
 
 /**
@@ -250,5 +254,62 @@ public abstract class MyListTest {
         String expected = "[1, -2, 5, 123, 12]";
         String actual = list.toString();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void iterator() throws Exception {
+        String actual = "";
+        for (Integer val: list) {
+            actual += "" + val + ';';
+        }
+        String expected = "1;-2;5;123;12;";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void iteratorRemove() throws Exception {
+        Iterator<Integer> it = list.iterator();
+        while (it.hasNext()) {
+            if (it.next() == 5) {
+                it.remove();
+                break;
+            }
+        }
+        String expected = "[1, -2, 123, 12]";
+        String actual =list.toString();
+        assertEquals(expected, actual);
+    }
+
+    @Test(expected = ConcurrentModificationException.class)
+    public void iteratorConcurrentModification() throws Exception {
+        Iterator<Integer> it = list.iterator();
+        while (it.hasNext()) {
+            if (it.next() == 5) {
+                list.remove(2);
+            }
+        }
+    }
+
+    /**
+     * testing invocation next method when hasNext returns false
+     *
+     */
+    @Test(expected = NoSuchElementException.class)
+    public void iteratorNextAfterLast() throws Exception {
+        Iterator<Integer> it = list.iterator();
+        while (it.hasNext()) {
+            it.next();
+        }
+        it.next();
+    }
+
+    /**
+     * testing invocation remove before first invocation of next
+     */
+    @Test(expected = IllegalStateException.class)
+    public void iteratorRemoveBeforeNext() throws Exception {
+        Iterator<Integer> it = list.iterator();
+        it.remove();
+
     }
 }

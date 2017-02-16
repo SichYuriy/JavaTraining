@@ -1,6 +1,5 @@
 package com.gmail.at.sichyuriyy.javatraining.labwork1;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -69,6 +68,7 @@ public class Application {
 
     }
 
+    @FunctionalInterface
     private interface Operation {
         void execute();
     }

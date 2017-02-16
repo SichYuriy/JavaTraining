@@ -22,13 +22,13 @@ public class Apartment {
     }
 
     public List<Appliance> sortByPower() {
-        appliances.sort((app1, app2) -> (app1.getPower() - app2.getPower()));
+        appliances.sort((app1, app2) -> app1.getPower() - app2.getPower());
         return  appliances;
     }
 
     public List<Appliance> findByPower(int powerFrom, int powerTo) {
         return appliances.stream()
-                .filter(app -> (app.getPower() >= powerFrom && app.getPower() <= powerTo))
+                .filter(app -> app.getPower() >= powerFrom && app.getPower() <= powerTo)
                 .collect(Collectors.toList());
     }
 

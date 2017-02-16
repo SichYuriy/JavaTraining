@@ -6,7 +6,7 @@ package com.gmail.at.sichyuriyy.javatraining.labwork1;
 public class CoffeeMachine extends Appliance {
 
     private static final String WORK_SUCCESS = "Coffee making in process";
-    private static String WORK_FAIL = "Coffee machine is unable to work without being turned on";
+    private static final String WORK_FAIL = "Coffee machine is unable to work without being turned on";
 
     private CoffeeMachine(int power, int weight) {
         super(power, weight);

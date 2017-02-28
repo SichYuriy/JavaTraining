@@ -1,6 +1,7 @@
 package com.gmail.at.sichyuriyy.javatraining.labwork1;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class Apartment {
     }
 
     public List<Appliance> sortByPower() {
-        appliances.sort((app1, app2) -> app1.getPower() - app2.getPower());
+        appliances.sort(Comparator.comparingInt(Appliance::getPower));
         return  appliances;
     }
 

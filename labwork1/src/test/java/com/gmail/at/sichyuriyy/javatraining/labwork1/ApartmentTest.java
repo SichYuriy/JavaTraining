@@ -13,9 +13,9 @@ import static org.junit.Assert.*;
 public class ApartmentTest {
 
     private Apartment apartment;
-    Appliance coffeeMachine;
-    Appliance kettle;
-    Appliance washingMachine;
+    private Appliance coffeeMachine;
+    private Appliance kettle;
+    private Appliance washingMachine;
 
     @Before
     public void setUp() throws Exception {

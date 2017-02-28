@@ -3,8 +3,7 @@ package com.gmail.at.sichyuriyy.javatraining.homework3.task11;
 import java.lang.ref.PhantomReference;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
-import java.nio.file.Files;
-import java.util.Optional;
+import java.util.ArrayList;
 
 /**
  * Created by Yuriy on 20.02.2017.
@@ -12,6 +11,7 @@ import java.util.Optional;
 public class Factory {
 
     private ReferenceQueue<A> queue;
+    private ArrayList<PhantomReference<A>> phantomReferences;
     private int maxObjectCount;
     private int objectCreatedCount = 0;
     private int objectFinalizedCount = 0;
@@ -19,22 +19,28 @@ public class Factory {
     public Factory(int maxObjectCount) {
         this.maxObjectCount = maxObjectCount;
         queue = new ReferenceQueue<>();
+        phantomReferences = new ArrayList<>();
     }
 
     public A createA() {
+        updateObjectFinalizedCount();
         if (objectCreatedCount - objectFinalizedCount >= maxObjectCount) {
             throw new IllegalStateException("can not create more than "
                     + maxObjectCount + " objects");
         }
         A result = new A();
         PhantomReference<A> phantomReference = new PhantomReference<>(result, queue);
+        phantomReferences.add(phantomReference);
+        objectCreatedCount++;
         return result;
     }
 
-
     private void updateObjectFinalizedCount() {
-        while (queue.poll() != null) {
+        Reference<? extends A> phantomReference = queue.poll();
+        while (phantomReference != null) {
+            phantomReferences.remove(phantomReference);
             objectFinalizedCount++;
+            phantomReference = queue.poll();
         }
     }
 

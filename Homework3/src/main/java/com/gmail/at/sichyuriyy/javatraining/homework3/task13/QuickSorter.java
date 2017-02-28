@@ -1,6 +1,9 @@
 package com.gmail.at.sichyuriyy.javatraining.homework3.task13;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Random;
 
 /**
  * Created by Yuriy on 20.02.2017.
@@ -32,7 +35,8 @@ public class QuickSorter implements Sorter {
 
     private int partition(Object[] arr, int from, int to, Comparator comp) {
         int size = to - from;
-        int midIndex = from + (int) (Math.random() * size);
+        Random random = new Random();
+        int midIndex = from + random.nextInt(size);
         Object midVal = arr[midIndex];
         swap(arr, midIndex, to - 1);
         int swapIndex = from;

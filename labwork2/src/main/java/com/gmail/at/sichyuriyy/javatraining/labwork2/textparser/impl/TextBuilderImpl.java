@@ -21,6 +21,7 @@ public class TextBuilderImpl implements TextBuilder {
     private final State INSIDE_WORD_STATE = new InsideWordState();
     private final State AFTER_SIMPLE_PUNCTUATION_STATE = new AfterSimplePunctuationState();
     private final State AFTER_END_PUNCTUATION_STATE = new AfterEndPunctuationState();
+    private final State AFTER_SPACE_STATE = new AfterSpaceState();
 
     private final String END_PUNCTUATIONS = ".!?";
 
@@ -129,7 +130,7 @@ public class TextBuilderImpl implements TextBuilder {
         public void buildSpace() {
             tempSentence.addWord(tempWord);
             tempSentence.addPunctuation(new PunctuationImpl(SPACE));
-            tempState = AFTER_SIMPLE_PUNCTUATION_STATE;
+            tempState = AFTER_SPACE_STATE;
         }
 
         @Override
@@ -162,6 +163,7 @@ public class TextBuilderImpl implements TextBuilder {
         @Override
         public void buildSpace() {
             tempSentence.addPunctuation(new PunctuationImpl(SPACE));
+            tempState = AFTER_SPACE_STATE;
         }
 
         @Override
@@ -184,7 +186,6 @@ public class TextBuilderImpl implements TextBuilder {
         @Override
         public void buildSimplePunctuationSymbol(char symbol) {
             text.addSentence(tempSentence);
-            text.addSentence(tempSentence);
             tempSentence = new SentenceImpl();
             tempSentence.addPunctuation(new PunctuationImpl(symbol));
             tempState = AFTER_SIMPLE_PUNCTUATION_STATE;
@@ -193,6 +194,37 @@ public class TextBuilderImpl implements TextBuilder {
         @Override
         public void buildEndPunctuationSymbol(char symbol) {
             tempSentence.addPunctuation(new PunctuationImpl(symbol));
+        }
+
+        @Override
+        public void buildSpace() {
+        }
+
+        @Override
+        public void buildEndText() {
+            text.addSentence(tempSentence);
+        }
+    }
+
+    private class AfterSpaceState implements State {
+
+        @Override
+        public void buildWordSymbol(char symbol) {
+            tempWord = new WordImpl();
+            tempWord.addLetter(new LetterImpl(symbol));
+            tempState = INSIDE_WORD_STATE;
+        }
+
+        @Override
+        public void buildSimplePunctuationSymbol(char symbol) {
+            tempSentence.addPunctuation(new PunctuationImpl(symbol));
+            tempState = AFTER_SIMPLE_PUNCTUATION_STATE;
+        }
+
+        @Override
+        public void buildEndPunctuationSymbol(char symbol) {
+            tempSentence.addPunctuation(new PunctuationImpl(symbol));
+            tempState = AFTER_END_PUNCTUATION_STATE;
         }
 
         @Override

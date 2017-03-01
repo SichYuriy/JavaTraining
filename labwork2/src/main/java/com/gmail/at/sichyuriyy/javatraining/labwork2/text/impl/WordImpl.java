@@ -59,4 +59,10 @@ public class WordImpl implements Word {
     public int hashCode() {
         return letters.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return getStringValue();
+    }
+
 }

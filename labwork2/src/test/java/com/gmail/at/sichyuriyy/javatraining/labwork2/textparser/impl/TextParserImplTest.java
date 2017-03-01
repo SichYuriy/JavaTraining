@@ -1,35 +1,78 @@
 package com.gmail.at.sichyuriyy.javatraining.labwork2.textparser.impl;
 
-import com.gmail.at.sichyuriyy.javatraining.labwork2.text.Sentence;
 import com.gmail.at.sichyuriyy.javatraining.labwork2.text.Text;
-import com.gmail.at.sichyuriyy.javatraining.labwork2.text.impl.SentenceImpl;
-import com.gmail.at.sichyuriyy.javatraining.labwork2.text.impl.TextImpl;
-import com.gmail.at.sichyuriyy.javatraining.labwork2.text.impl.WordImpl;
 import com.gmail.at.sichyuriyy.javatraining.labwork2.textparser.TextParser;
+import java.io.File;
+import java.io.IOException;
+
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Yuriy on 28.02.2017.
  */
 public class TextParserImplTest {
 
-    TestData testData = TestData.getTextExample();
     TextParser textParser = new TextParserImpl();
 
+
     @Test
-    public void parseTextString() {
+    public void parseTextFromStringStructure() {
+        TestData testData = TestData.getTextExample();
         String str = testData.stringValue;
         Text text = textParser.parseText(str);
         Text expected = testData.expectedText;
         assertEquals(expected, text);
+    }
+
+    @Test
+    public void parseTextFromFileStructure() throws IOException{
+        TestData testData = TestData.getTextExample();
+        File file = new File(testData.fileName);
+        Text text = textParser.parseText(file);
+        Text expected = testData.expectedText;
+
+        System.out.println(expected.getStringValue());
+        System.out.println(text.getStringValue());
+
+        assertEquals(expected, text);
+    }
+
+    @Test
+    public void parseTextString() {
+        TestData testData = TestData.getTextExample();
+        String str = testData.stringValue;
+        Text text = textParser.parseText(str);
         assertEquals(str, text.getStringValue());
     }
 
     @Test
-    public void parseText1() throws Exception {
+    public void parseTextCommaStart() {
+        TestData testData = TestData.getTextWithCommaStart();
+        String str = testData.stringValue;
+        Text text = textParser.parseText(str);
+        Text expected = testData.expectedText;
+        assertEquals(expected, text);
+    }
 
+    @Test
+    public void parseTextPointStart() {
+        TestData testData = TestData.getTextWithPointStart();
+        String str = testData.stringValue;
+        Text text = textParser.parseText(str);
+        Text expected = testData.expectedText;
+        assertEquals(expected, text);
+    }
+
+    @Test
+    public void parseTextWithEmptyEnd() {
+        TestData testData = TestData.getTextWithEmptyEnd();
+        String str = testData.stringValue;
+        Text text = textParser.parseText(str);
+        Text expected = testData.expectedText;
+        assertEquals(expected, text);
     }
 
 }

@@ -43,7 +43,7 @@ public class TextImpl implements Text {
             result.addAll(sentence.getWords());
         }
         result.sort((word1, word2) -> {
-            int cmp = word1.letterCount(letter) - word1.letterCount(letter);
+            int cmp = word1.letterCount(letter) - word2.letterCount(letter);
             if (cmp != 0) {
                 return cmp;
             }

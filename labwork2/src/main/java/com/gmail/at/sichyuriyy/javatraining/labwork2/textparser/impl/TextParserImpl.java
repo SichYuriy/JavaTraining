@@ -11,8 +11,6 @@ import java.io.*;
  */
 public class TextParserImpl implements TextParser {
 
-
-
     @Override
     public Text parseText(File file) throws IOException {
         TextBuilder textBuilder = new TextBuilderImpl();
@@ -20,7 +18,10 @@ public class TextParserImpl implements TextParser {
 
         try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
-            parseContent(textBuilder, line);
+            while (line != null) {
+                parseContent(textBuilder, line);
+                line = reader.readLine();
+            }
         }
 
         textBuilder.buildEndText();
@@ -42,10 +43,10 @@ public class TextParserImpl implements TextParser {
         String []content = text.split("\\s+");
 
         for (String part: content) {
+            textBuilder.buildSpace();
             for (char symbol: part.toCharArray()) {
                 textBuilder.buildSymbol(symbol);
             }
-            textBuilder.buildSpace();
         }
     }
 }

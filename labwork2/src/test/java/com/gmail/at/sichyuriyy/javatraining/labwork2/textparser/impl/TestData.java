@@ -9,11 +9,16 @@ import com.gmail.at.sichyuriyy.javatraining.labwork2.text.impl.WordImpl;
 /**
  * Created by Yuriy on 28.02.2017.
  */
-public class TestData {
+class TestData {
 
-    public static TestData getTextExample() {
+    private static final String TEXT_EXAMPLE = "Text example... The(hi), end!";
+    private static final String TEXT_WITH_COMMA_START = ",. , , begin. ,end.";
+    private static final String TEXT_WITH_POINT_START = ". a . end.";
+    private static final String TEXT_WITH_EMPTY_END = "Word";
+
+    static TestData getTextExample() {
         TestData testData = new TestData();
-        testData.stringValue = "Text example... The(hi), end!";
+        testData.stringValue = TEXT_EXAMPLE;
         testData.fileName = "test.txt";
         TextImpl text = new TextImpl();
         SentenceImpl sentence1 = new SentenceImpl();
@@ -38,9 +43,9 @@ public class TestData {
         return  testData;
     }
 
-    public static TestData getTextWithCommaStart() {
+    static TestData getTextWithCommaStart() {
         TestData testData = new TestData();
-        testData.stringValue = ",. , , begin. ,end.";
+        testData.stringValue = TEXT_WITH_COMMA_START;
         TextImpl text = new TextImpl();
         SentenceImpl sentence1 = new SentenceImpl();
         sentence1.addPunctuation(new PunctuationImpl(','));
@@ -63,9 +68,9 @@ public class TestData {
         return testData;
     }
 
-    public static TestData getTextWithPointStart() {
+    static TestData getTextWithPointStart() {
         TestData testData = new TestData();
-        testData.stringValue = ". a . end.";
+        testData.stringValue = TEXT_WITH_POINT_START;
         TextImpl text = new TextImpl();
         SentenceImpl sentence1 = new SentenceImpl();
         sentence1.addPunctuation(new PunctuationImpl('.'));
@@ -83,9 +88,9 @@ public class TestData {
         return testData;
     }
 
-    public static TestData getTextWithEmptyEnd() {
+    static TestData getTextWithEmptyEnd() {
         TestData testData = new TestData();
-        testData .stringValue = "Word";
+        testData .stringValue = TEXT_WITH_EMPTY_END;
         TextImpl text = new TextImpl();
         SentenceImpl sentence = new SentenceImpl();
         sentence.addWord(new WordImpl("Word"));
@@ -94,9 +99,9 @@ public class TestData {
         return testData;
     }
 
-    public String stringValue;
-    public Text expectedText;
-    public String fileName;
+    String stringValue;
+    Text expectedText;
+    String fileName;
 
 
 }

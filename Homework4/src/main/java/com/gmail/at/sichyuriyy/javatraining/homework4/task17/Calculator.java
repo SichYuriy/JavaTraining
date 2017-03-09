@@ -1,6 +1,4 @@
-package com.gmail.at.sichyuriyy.javatraining.homework3.task17;
-
-import javafx.util.Pair;
+package com.gmail.at.sichyuriyy.javatraining.homework4.task17;
 
 import java.util.*;
 import java.util.function.BiFunction;

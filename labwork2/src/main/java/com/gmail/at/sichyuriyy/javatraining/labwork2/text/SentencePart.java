@@ -6,4 +6,6 @@ package com.gmail.at.sichyuriyy.javatraining.labwork2.text;
 public interface SentencePart {
 
     String getStringValue();
+
+    boolean isWord();
 }

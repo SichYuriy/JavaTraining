@@ -15,4 +15,9 @@ public class PunctuationImpl extends AbstractSymbol implements Punctuation {
     public String getStringValue() {
         return String.valueOf(getCharValue());
     }
+
+    @Override
+    public boolean isWord() {
+        return false;
+    }
 }

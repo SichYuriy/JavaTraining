@@ -44,4 +44,13 @@ public class TextImplTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void sortWordsByLetterCountEmptyText() throws Exception {
+        String str = "";
+        TextParser textParser = new TextParserImpl();
+        Text text = textParser.parseText(str);
+        List<Word> actual = text.sortWordsByLetterCount('w');
+
+        assertTrue(actual.isEmpty());
+    }
 }

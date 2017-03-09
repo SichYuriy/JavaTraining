@@ -14,16 +14,20 @@ import java.util.List;
 public class SentenceImpl implements Sentence {
 
     private List<SentencePart> parts;
-    private List<Word> words;
 
     public SentenceImpl() {
         parts = new ArrayList<>();
-        words = new ArrayList<>();
     }
 
     @Override
     public List<Word> getWords() {
-        return new ArrayList<>(words);
+        List<Word> result = new ArrayList<>();
+        for (SentencePart part: parts) {
+            if (part.isWord()) {
+                result.add((Word) part);
+            }
+        }
+        return result;
     }
 
     @Override
@@ -46,7 +50,6 @@ public class SentenceImpl implements Sentence {
     }
 
     public void addWord(Word word) {
-        words.add(word);
         parts.add(word);
     }
 
@@ -58,13 +61,11 @@ public class SentenceImpl implements Sentence {
         SentenceImpl sentence = (SentenceImpl) o;
 
         if (!parts.equals(sentence.parts)) return false;
-        return words.equals(sentence.words);
+        return true;
     }
 
     @Override
     public int hashCode() {
-        int result = parts.hashCode();
-        result = 31 * result + words.hashCode();
-        return result;
+        return parts.hashCode();
     }
 }

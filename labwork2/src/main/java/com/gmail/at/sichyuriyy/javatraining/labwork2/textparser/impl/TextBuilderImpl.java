@@ -2,51 +2,52 @@ package com.gmail.at.sichyuriyy.javatraining.labwork2.textparser.impl;
 
 import com.gmail.at.sichyuriyy.javatraining.labwork2.text.Text;
 import com.gmail.at.sichyuriyy.javatraining.labwork2.text.impl.*;
-import com.gmail.at.sichyuriyy.javatraining.labwork2.textparser.TextBuilder;
 
 /**
  * Created by Yuriy on 28.02.2017.
  */
 public class TextBuilderImpl implements TextBuilder {
 
-    private final static char SPACE = ' ';
+    private static final char SPACE = ' ';
+    private static final String END_PUNCTUATIONS = ".!?";
 
     private TextImpl text;
     private SentenceImpl tempSentence;
     private WordImpl tempWord;
 
     private State tempState;
+    private boolean lastSpace;
 
-    private final State NEW_SENTENCE_STATE = new NewSentenceState();
-    private final State INSIDE_WORD_STATE = new InsideWordState();
-    private final State AFTER_SIMPLE_PUNCTUATION_STATE = new AfterSimplePunctuationState();
-    private final State AFTER_END_PUNCTUATION_STATE = new AfterEndPunctuationState();
-    private final State AFTER_SPACE_STATE = new AfterSpaceState();
-
-    private final String END_PUNCTUATIONS = ".!?";
+    private final State newSentenceState = new NewSentenceState();
+    private final State insideWordState = new InsideWordState();
+    private final State afterSimplePunctuationState = new AfterSimplePunctuationState();
+    private final State afterEndPunctuationState = new AfterEndPunctuationState();
 
     @Override
     public void createNewText() {
         text = new TextImpl();
         tempSentence = new SentenceImpl();
-        tempState = NEW_SENTENCE_STATE;
+        tempState = newSentenceState;
     }
 
     @Override
     public void buildSymbol(char symbol) {
         if (isEndPunctuationSymbol(symbol)) {
             tempState.buildEndPunctuationSymbol(symbol);
+            lastSpace = false;
         } else if (isWordLetter(symbol)) {
             tempState.buildWordSymbol(symbol);
+            lastSpace = false;
         } else {
             tempState.buildSimplePunctuationSymbol(symbol);
+            lastSpace = false;
         }
-
     }
 
     @Override
     public void buildSpace() {
         tempState.buildSpace();
+        lastSpace = true;
     }
 
     @Override
@@ -81,27 +82,30 @@ public class TextBuilderImpl implements TextBuilder {
         public void buildWordSymbol(char symbol) {
             tempWord = new WordImpl();
             tempWord.addLetter(new LetterImpl(symbol));
-            tempState = INSIDE_WORD_STATE;
+            tempState = insideWordState;
         }
 
         @Override
         public void buildSimplePunctuationSymbol(char symbol) {
             tempSentence.addPunctuation(new PunctuationImpl(symbol));
-            tempState = AFTER_SIMPLE_PUNCTUATION_STATE;
+            tempState = afterSimplePunctuationState;
         }
 
         @Override
         public void buildEndPunctuationSymbol(char symbol) {
             tempSentence.addPunctuation(new PunctuationImpl(symbol));
-            tempState = AFTER_END_PUNCTUATION_STATE;
+            tempState = afterEndPunctuationState;
         }
 
         @Override
         public void buildSpace() {
+            // Do nothing because sentence can not have space as first symbol
         }
+
 
         @Override
         public void buildEndText() {
+            // Do nothing because there is no sentences to add to text
         }
     }
 
@@ -116,21 +120,21 @@ public class TextBuilderImpl implements TextBuilder {
         public void buildSimplePunctuationSymbol(char symbol) {
             tempSentence.addWord(tempWord);
             tempSentence.addPunctuation(new PunctuationImpl(symbol));
-            tempState = AFTER_SIMPLE_PUNCTUATION_STATE;
+            tempState = afterSimplePunctuationState;
         }
 
         @Override
         public void buildEndPunctuationSymbol(char symbol) {
             tempSentence.addWord(tempWord);
             tempSentence.addPunctuation(new PunctuationImpl(symbol));
-            tempState = AFTER_END_PUNCTUATION_STATE;
+            tempState = afterEndPunctuationState;
         }
 
         @Override
         public void buildSpace() {
             tempSentence.addWord(tempWord);
             tempSentence.addPunctuation(new PunctuationImpl(SPACE));
-            tempState = AFTER_SPACE_STATE;
+            tempState = afterSimplePunctuationState;
         }
 
         @Override
@@ -146,7 +150,7 @@ public class TextBuilderImpl implements TextBuilder {
         public void buildWordSymbol(char symbol) {
             tempWord = new WordImpl();
             tempWord.addLetter(new LetterImpl(symbol));
-            tempState = INSIDE_WORD_STATE;
+            tempState = insideWordState;
         }
 
         @Override
@@ -157,13 +161,15 @@ public class TextBuilderImpl implements TextBuilder {
         @Override
         public void buildEndPunctuationSymbol(char symbol) {
             tempSentence.addPunctuation(new PunctuationImpl(symbol));
-            tempState = AFTER_END_PUNCTUATION_STATE;
+            tempState = afterEndPunctuationState;
         }
 
         @Override
         public void buildSpace() {
-            tempSentence.addPunctuation(new PunctuationImpl(SPACE));
-            tempState = AFTER_SPACE_STATE;
+            if (!lastSpace) {
+                tempSentence.addPunctuation(new PunctuationImpl(SPACE));
+                tempState = afterSimplePunctuationState;
+            }
         }
 
         @Override
@@ -180,7 +186,7 @@ public class TextBuilderImpl implements TextBuilder {
             tempSentence = new SentenceImpl();
             tempWord = new WordImpl();
             tempWord.addLetter(new LetterImpl(symbol));
-            tempState = INSIDE_WORD_STATE;
+            tempState = insideWordState;
         }
 
         @Override
@@ -188,7 +194,7 @@ public class TextBuilderImpl implements TextBuilder {
             text.addSentence(tempSentence);
             tempSentence = new SentenceImpl();
             tempSentence.addPunctuation(new PunctuationImpl(symbol));
-            tempState = AFTER_SIMPLE_PUNCTUATION_STATE;
+            tempState = afterSimplePunctuationState;
         }
 
         @Override
@@ -198,6 +204,7 @@ public class TextBuilderImpl implements TextBuilder {
 
         @Override
         public void buildSpace() {
+            // Sentence can not have space as first symbol
         }
 
         @Override
@@ -206,34 +213,5 @@ public class TextBuilderImpl implements TextBuilder {
         }
     }
 
-    private class AfterSpaceState implements State {
 
-        @Override
-        public void buildWordSymbol(char symbol) {
-            tempWord = new WordImpl();
-            tempWord.addLetter(new LetterImpl(symbol));
-            tempState = INSIDE_WORD_STATE;
-        }
-
-        @Override
-        public void buildSimplePunctuationSymbol(char symbol) {
-            tempSentence.addPunctuation(new PunctuationImpl(symbol));
-            tempState = AFTER_SIMPLE_PUNCTUATION_STATE;
-        }
-
-        @Override
-        public void buildEndPunctuationSymbol(char symbol) {
-            tempSentence.addPunctuation(new PunctuationImpl(symbol));
-            tempState = AFTER_END_PUNCTUATION_STATE;
-        }
-
-        @Override
-        public void buildSpace() {
-        }
-
-        @Override
-        public void buildEndText() {
-            text.addSentence(tempSentence);
-        }
-    }
 }

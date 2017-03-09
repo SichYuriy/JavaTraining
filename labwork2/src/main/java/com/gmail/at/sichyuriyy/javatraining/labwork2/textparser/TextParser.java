@@ -3,7 +3,6 @@ package com.gmail.at.sichyuriyy.javatraining.labwork2.textparser;
 import com.gmail.at.sichyuriyy.javatraining.labwork2.text.Text;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**

@@ -1,4 +1,4 @@
-package com.gmail.at.sichyuriyy.javatraining.labwork2.textparser;
+package com.gmail.at.sichyuriyy.javatraining.labwork2.textparser.impl;
 
 import com.gmail.at.sichyuriyy.javatraining.labwork2.text.Text;
 

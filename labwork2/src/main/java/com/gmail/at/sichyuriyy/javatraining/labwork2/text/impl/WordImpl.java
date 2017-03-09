@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class WordImpl implements Word {
 
+    private boolean isWord = true;
+
     private List<Letter> letters;
 
     public WordImpl() {
@@ -31,6 +33,11 @@ public class WordImpl implements Word {
             result.append(letter.getCharValue());
         }
         return result.toString();
+    }
+
+    @Override
+    public boolean isWord() {
+        return isWord;
     }
 
     @Override

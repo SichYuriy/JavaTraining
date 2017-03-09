@@ -34,9 +34,6 @@ public class TextParserImplTest {
         Text text = textParser.parseText(file);
         Text expected = testData.expectedText;
 
-        System.out.println(expected.getStringValue());
-        System.out.println(text.getStringValue());
-
         assertEquals(expected, text);
     }
 

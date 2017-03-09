@@ -7,7 +7,7 @@ import com.gmail.at.sichyuriyy.javatraining.labwork2.text.Symbol;
  */
 public class AbstractSymbol implements Symbol {
 
-    char symbol;
+    private char symbol;
 
     public AbstractSymbol(char symbol) {
         this.symbol = symbol;

@@ -5,7 +5,5 @@ package com.gmail.at.sichyuriyy.javatraining.labwork2.text;
  */
 public interface Word extends SentencePart {
 
-    String getStringValue();
-
     int letterCount(Letter letter);
 }
